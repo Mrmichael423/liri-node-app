@@ -38,7 +38,9 @@ axios.get(bands).then(function(response) {
 }
 function movieThis(){
 axios.get(omdb).then(function(response) {
-    console.log(response.data)
+    // console.log(response.data)
+    var info = response.data
+    console.log(`Title: ${info.Title} \nYear: ${info.Year} \n`)
 })
 }
 
