@@ -11,34 +11,35 @@ var search = process.argv.slice(3).join(" ")
 var omdb = "http://www.omdbapi.com/?s=" + search + "&apikey=7d5d5a0a"
 var bands = "https://rest.bandsintown.com/artists/" + search + "/events?app_id=codingbootcamp"
 
-var runApp = function(term) {
+var runApp = function() {
     switch (term) {
         case "concert-this":
-            concertThis(search)
+            concertThis(bands)
             break
         case "spotify-this-song":
-            spotifyThisSong(search)
+            spotifyThisSong()
             break
         case "movie-this":
-            movieThis(search)
+            movieThis(omdb)
             break
         case "do-what-it-says":
-            doWhatItSays(search)
+            doWhatItSays()
             break
         default:
-            outputData("That is not a command that I recognize, please try again.") 
+            console.log("That is not a command that I recognize, please try again.") 
     }
 }
 function concertThis() {
 axios.get(bands).then(function(response) {
     var info = response.data
-    console.log(info)
+    // console.log(info)
     console.log(`venue name: ${info.venue.name} \nvenue location: ${info.name.city} \n`)
     })
 }
-concertThis()
-// axios.get(omdb).then(function(response) {
-//     console.log(response.data)
-// })
+function movieThis(){
+axios.get(omdb).then(function(response) {
+    console.log(response.data)
+})
+}
 
-
+runApp()
