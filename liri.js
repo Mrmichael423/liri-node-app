@@ -1,47 +1,85 @@
 require("dotenv").config();
 var keys = require("./keys.js");
 // var spotify = new Spotify(keys.spotify);
-var fs = require("fs")
-var axios = require("axios")
-var inquirer = require("inquirer")
+var fs = require("fs");
+var axios = require("axios");
+var inquirer = require("inquirer");
+var moment = require("moment");
+var Spotify = require("node-spotify-api");
+var search = process.argv.slice(3).join(" ");
+var term = process.argv[2];
 
-var Spotify = require('node-spotify-api')
-var term = process.argv[2]
-var search = process.argv.slice(3).join(" ")
-var omdb = "http://www.omdbapi.com/?s=" + search + "&apikey=7d5d5a0a"
-var bands = "https://rest.bandsintown.com/artists/" + search + "/events?app_id=codingbootcamp"
+var runApp = function(term, search) {
+  switch (term) {
+    case "concert-this":
+      concertThis(search);
+      break;
+    case "spotify-this-song":
+      spotifyThisSong(search);
+      break;
+    case "movie-this":
+      movieThis(search);
+      break;
+    case "do-what-it-says":
+      doWhatItSays();
+      break;
+    default:
+      console.log("That is not a command that I recognize, please try again.");
+  }
+};
 
-var runApp = function() {
-    switch (term) {
-        case "concert-this":
-            concertThis(bands)
-            break
-        case "spotify-this-song":
-            spotifyThisSong()
-            break
-        case "movie-this":
-            movieThis(omdb)
-            break
-        case "do-what-it-says":
-            doWhatItSays()
-            break
-        default:
-            console.log("That is not a command that I recognize, please try again.") 
-    }
-}
-function concertThis() {
-axios.get(bands).then(function(response) {
-    var info = response.data
-    // console.log(info)
-    console.log(`venue name: ${info.venue.name} \nvenue location: ${info.name.city} \n`)
+var spotifyThisSong = function(search) {
+  var spotify = new Spotify(keys.spotify);
+  spotify
+    .search({ type: "track", query: search, limit: 1 })
+    .then(function(response) {
+      console.log(response);
     })
-}
-function movieThis(){
-axios.get(omdb).then(function(response) {
-    // console.log(response.data)
-    var info = response.data
-    console.log(`Title: ${info.Title} \nYear: ${info.Year} \n`)
-})
+    .catch(function(err) {
+      console.log(err);
+    });
+};
+
+function concertThis(search) {
+  if (search === "") {
+    search = "kenny chesney";
+  }
+  var bands =
+    "https://rest.bandsintown.com/artists/" +
+    search +
+    "/events?app_id=codingbootcamp";
+  axios.get(bands).then(function(response) {
+    var info = response.data;
+    // console.log(info[0])
+    for (var i = 0; i < info.length; i++) {
+      var date = moment(info[i].datetime).format("MM/DD/YYYY");
+      console.log(
+        `venue name: ${info[i].venue.name} \nvenue location: ${info[i].venue.city} \nDate: ${date} \n ---------------`
+      );
+    }
+  });
 }
 
-runApp()
+function movieThis() {
+  if (search === "") {
+    search = "mr. nobody";
+  }
+  var omdb = "http://www.omdbapi.com/?s=" + search + "&apikey=7d5d5a0a";
+  axios.get(omdb).then(function(response) {
+    console.log(response.data);
+    var info = response.data;
+    console.log(`Title: ${info.Title}, \nYear: ${info.Year}, \n`);
+  });
+}
+
+function doWhatItSays() {
+  fs.readFile("random.txt", "utf", function(err, data) {
+    if (err) {
+      throw err;
+    }
+    var input = data.split(",");
+    runApp(input[0], input[1]);
+  });
+}
+
+runApp(term, search);
