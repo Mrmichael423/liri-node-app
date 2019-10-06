@@ -29,11 +29,20 @@ var runApp = function(term, search) {
 };
 
 var spotifyThisSong = function(search) {
+  if (search === "") {
+    search = "The Sign";
+  }
   var spotify = new Spotify(keys.spotify);
   spotify
     .search({ type: "track", query: search, limit: 1 })
     .then(function(response) {
-      console.log(response);
+      //   console.log(response.tracks.items);
+      var song = response.tracks.items;
+      for (var i = 0; i < song.length; i++) {
+        console.log(
+          `--------- \nArtist: ${song[i].artists[0].name} \n--------- \nSong title: ${song[i].name} \n--------- \nPreview song: ${song[i].preview_url} \n--------- \nAlbum: ${song[i].album.name}`
+        );
+      }
     })
     .catch(function(err) {
       console.log(err);
@@ -67,13 +76,13 @@ function movieThis() {
   var omdb = "http://www.omdbapi.com/?s=" + search + "&apikey=7d5d5a0a";
   axios.get(omdb).then(function(response) {
     console.log(response.data);
-    var info = response.data;
+    var info = response;
     console.log(`Title: ${info.Title}, \nYear: ${info.Year}, \n`);
   });
 }
 
 function doWhatItSays() {
-  fs.readFile("random.txt", "utf", function(err, data) {
+  fs.readFile("random.txt", "utf8", function(err, data) {
     if (err) {
       throw err;
     }
