@@ -1,9 +1,7 @@
 require("dotenv").config();
 var keys = require("./keys.js");
-// var spotify = new Spotify(keys.spotify);
 var fs = require("fs");
 var axios = require("axios");
-var inquirer = require("inquirer");
 var moment = require("moment");
 var Spotify = require("node-spotify-api");
 var search = process.argv.slice(3).join(" ");
@@ -73,11 +71,13 @@ function movieThis() {
   if (search === "") {
     search = "mr. nobody";
   }
-  var omdb = "http://www.omdbapi.com/?s=" + search + "&apikey=7d5d5a0a";
+  var omdb = "http://www.omdbapi.com/?t=" + search + "&plot=&apikey=7d5d5a0a";
   axios.get(omdb).then(function(response) {
-    console.log(response.data);
-    var info = response;
-    console.log(`Title: ${info.Title}, \nYear: ${info.Year}, \n`);
+    var info = response.data;
+    console.log(info);
+    console.log(
+      `Title: ${info.Title},\n--------- \nYear: ${info.Year},\n--------- \nIMDB Rating: ${info.Ratings[0].Value}\n--------- \n Country Filmed ${info.Country}\n--------- \nLanguage of movie: ${info.Language}\n---------\n Plot: ${info.Plot}\n--------- \nActors: ${info.Actors} \n---------`
+    );
   });
 }
 
