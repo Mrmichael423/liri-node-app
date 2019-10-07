@@ -74,7 +74,7 @@ function movieThis() {
   var omdb = "http://www.omdbapi.com/?t=" + search + "&plot=&apikey=7d5d5a0a";
   axios.get(omdb).then(function(response) {
     var info = response.data;
-    console.log(info);
+    // console.log(info);
     console.log(
       `Title: ${info.Title},\n--------- \nYear: ${info.Year},\n--------- \nIMDB Rating: ${info.Ratings[0].Value}\n--------- \n Country Filmed ${info.Country}\n--------- \nLanguage of movie: ${info.Language}\n---------\n Plot: ${info.Plot}\n--------- \nActors: ${info.Actors} \n---------`
     );
