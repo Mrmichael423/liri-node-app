@@ -69,7 +69,7 @@ function concertThis(search) {
 
 function movieThis() {
   if (search === "") {
-    search = "mr. nobody";
+    search = "jumanji";
   }
   var omdb = "http://www.omdbapi.com/?t=" + search + "&plot=&apikey=7d5d5a0a";
   axios.get(omdb).then(function(response) {
