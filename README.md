@@ -1,3 +1,4 @@
 # liri-node-app
 
-chrome-extension://mmeijimgabbpbgpdklnllpncmdofkcpn/ng/app/app.html#/files/631894fb-e8c3-400d-y9be-8206f23c9a0c
+view how it works here
+https://drive.google.com/file/d/1Oh1SCUpE_Cq6bB9g9manJVQ-bkdjAbHO/view?usp=sharing
